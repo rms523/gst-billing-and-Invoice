@@ -1,0 +1,85 @@
+
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">The United Cargo</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href={{url_for('data_entry')}}>Entry</a></li>
+            <li><a href={{url_for('user_settings')}}>Settings</a></li>
+            <li><a href={{url_for('user_profile')}}>Profile</a></li>
+            <li><a href={{url_for('logout')}}>Log Out</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <h2 class="sub-header">Section title</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>GR.NO</th>
+                  <th>Pkgs</th>
+                  <th>A.WT</th>
+                  <th>C.WT</th>
+                    <th>INVOICE NO.</th>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Mode</th>
+                    <th>Freight</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in datafields %}
+
+
+                   <tr>
+
+                     <th>{{row['creation']}}</th>
+                     <th>{{row['grno']}}</th>
+                     <th>{{row['pkgs']}}</th>
+                     <th>{{row['awt']}}</th>
+                     <th>{{row['cwt']}}</th>
+                     <th>{{row['invoiceno']}}</th>
+                     <th>{{row['sender']}}</th>
+                     <th>{{row['receiver']}}</th>
+                     <th>{{row['origin']}}</th>
+                     <th>{{row['destination']}}</th>
+                     <th>{{row['mode']}}</th>
+                     <th>{{row['freight']}}</th>
+
+
+
+
+                   </tr>
+
+                {% endfor %}
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

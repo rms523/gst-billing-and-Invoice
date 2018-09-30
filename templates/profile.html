@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block page_content %}
+{% if email|string() == "None" %}
+    <h1>Invalid Login credentials.</h1>
+    <a href="/login">Go Back</a>
+    <hr>
+    <a href="/">Home</a>
+
+{% else %}
+    <h1>  Hello {{ email }} </h1>
+    <ul>
+         <p>Create a New Blog</p><a href="/blogs/new">New Blog</a>
+         <p>List YOur Blogs</p><a href="/blogs">List Blog</a>
+    </ul>
+{% endif %}
+{% endblock %}
