@@ -4,24 +4,27 @@ from billing_portal.common.databasesql import Database
 
 
 class User(object):
-    def __init__(self, uid, email, password):
-        self.email = email
+
+    name = ""
+    password = ""
+
+    def __init__(self, username, password):
+        self.username = username
         self.password = password
-        self.uid = uid
 
     @classmethod
-    def get_by_email(cls,email):
-        data = Database.find(email)
+    def get_by_name(cls,username):
+        data = Database.find(username)
         if data is not None:
             return cls(**data)
 
 
     @staticmethod
-    def login_valid(email, password):
-        user = User.get_by_email(email)
+    def login_valid( username, password):
+        user = User.get_by_name(username)
         if user is not None:
             try:
-                 if sha256_crypt.verify(password, user.password):
+                if(user.username == username and user.password == password):
                      return True
             except Exception as e:
                 return False
@@ -29,21 +32,21 @@ class User(object):
         return False
 
     @classmethod
-    def add_user(cls, email, password ):
-        user = cls.get_by_email(email)
+    def add_user(cls, username, password ):
+        user = cls.get_by_name(username)
         if user is None:
             password = sha256_crypt.encrypt(str(password))
-            Database.insert(email, password)
-            session['email'] = email
+            Database.insert(username, password)
+            session['name'] = username
             return True
         else:
             return False
 
 
     @staticmethod
-    def login(user_email):
+    def login(username):
         session['logged_in'] = True
-        session['email'] = user_email
+        session['name'] = username
 
     @staticmethod
     def logout():

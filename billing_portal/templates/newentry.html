@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <title>The United Cargo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-agency/5.0.2/css/agency.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/style1.css" rel="stylesheet" type="text/css">
+    <style>
+
+    </style>
+</head>
+<body>
+
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Select Options</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="{{url_for('user_settings')}}">New User</a>
+                    </li>
+                    <li>
+                        <a href="{url_for('user_settings')}">Change Password</a>
+                    </li>
+                     <li>
+                        <a href="{url_for('user_settings')}">Delete User</a>
+                    </li>
+                    <li>
+                        <a href="{url_for('user_settings')}">GST</a>
+                    </li>
+                    <li>
+                        <a href="{url_for('user_settings')}">Service Tax</a>
+                    </li>
+                </ul>
+            </li>
+             <li>
+                <a href="{{url_for('dashboard')}}">Dashboard</a>
+            </li>
+            <li>
+                <a href={{url_for('new_entry')}}>New Entry</a>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="{url_for('user_settings'})">Invoice</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+
+
+<div class="container-fluid">
+
+            <form action="/New_Entry" method="post" enctype="multipart/form-data">
+                <fieldset>
+
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="date"><span class="FieldInfo">Date:</span> </label>
+                            <input class="form-control" type="Date" name="date" id="Date" placeholder="Date" >
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="prdct"><span class="FieldInfo">Product:</span> </label>
+                            <input class="form-control" type="text" name="prdct" id="prdct" placeholder="product" >
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="rate"><span class="FieldInfo">Rate:</span> </label>
+                            <input class="form-control" type="text" name="rate" id="rate" placeholder="per kg or per item">
+                        </div></div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="qty"><span class="FieldInfo">Quantity:</span> </label>
+                            <input class="form-control" type="text" name="qty" id="qty" placeholder="number">
+                        </div></div>
+                    </div>
+
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="gst"><span class="FieldInfo">GST</span> </label>
+                            <input class="form-control" type="text" name="gst" id="gst" placeholder="gst">
+                        </div></div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="stax"><span class="FieldInfo">Service Tax:</span> </label>
+                            <input class="form-control" type="text" name="stax" id="stax" placeholder="s.tax">
+                        </div></div>
+                    </div>
+
+
+                    <div class="row">
+                    <div class="col-md-6 pull-right"> </div>
+                    <div class="col-md-6 pull-right">
+                        <br>
+                        <br>
+
+
+                        <table class="table table-hover table-bordered text-right">
+                            <tr>
+                                <td style="width: 40%;"></td>
+                                <td style="width: 60%;"
+                                    class="amount"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Sub Total</b></td>
+                                <td class="amount"><></td>
+                            <tr>
+                                <td class="amount"><b>GST</b></td>
+                                <td><></td>
+                            </tr>
+                            <tr>
+                                <td class="amount"><b>Service Tax</b></td>
+                                <td><></td>
+                            </tr>
+                            <tr>
+
+                                <td class="amount"><b>Total</b></td>
+                                <td><b><></b></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    </div>
+
+                    <div class="col-md-6 center">
+                        <input class="btn btn-success btn-block" type="Submit" name="Submit" value="Add New Entry">
+                    </div>
+
+                </fieldset>
+
+            </form>
+</div> <!-- Ending of Container-->>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+
+
+</body>
+</html>
+

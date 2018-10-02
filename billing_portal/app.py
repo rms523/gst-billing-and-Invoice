@@ -7,6 +7,7 @@ from flask import session
 from flask import url_for
 from nocache import nocache
 
+import time
 from billing_portal.common.databasesql import Database
 from billing_portal.models.user import User
 from billing_portal.models.allfields import Allfields
@@ -37,10 +38,9 @@ def login_required(f):
 
     return wrap
 
-
 @app.route('/')
 def home_template():
-    return render_template('home.html')
+    return redirect(url_for('login_template'))
 
 
 
@@ -60,39 +60,42 @@ def register_template():
 @app.route('/auth/login',methods=['POST'])
 @nocache
 def login_user():
-    email = request.form['email']
+
+    username = request.form['email']
     password = request.form['password']
 
+    newuser = User(username, password)
 
-    if User.login_valid(email,password):
-        User.login(email)
-        if(email=='admin'):
-            return redirect("url_for('dashboard')", datafields=Allfields.fetchallfields())
-        else:
-            return
+    if newuser.login_valid(username, password):
+        newuser.login(username)
+        return redirect(url_for('dashboard'))
     else:
-        session['email']= None
+        session['name']= None
         return render_template("login.html")
 
 
-@app.route('/auth/login',methods=['POST'])
-@nocache
+@app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
-    render_template()
+    datafields=Allfields.fetchallfields()
+    if request.method == 'POST':
 
+        return render_template('dashboard.html', datafields=datafields)
+
+    else:
+
+        return render_template('dashboard.html', datafields=datafields)
 
 @app.route('/auth/add_user',methods=['POST'])
 def add_user():
-    email = request.form['email']
+    username = request.form['email']
     password = request.form['password']
 
-    if(User.add_user(email, password)):
+    if(User.add_user(username, password)):
         return render_template("profile.html")
 
     else:
         flash("That username already exists.!")
         return render_template("add_user.html")
-
 
 
 @app.route('/data_entry')
@@ -149,6 +152,35 @@ def user_profile():
 def user_settings():
     return render_template('user_settings.html')
 
+@app.route('/New_Entry', methods=['GET', 'POST'])
+def new_entry():
+    if request.method == 'POST':
+        datafields = []
+        date = request.form['date']
+        #date = time.strftime(date)
+        datafields.append(date)
+        prdct = request.form['prdct']
+        datafields.append(prdct)
+        rate = int(request.form['rate'])
+        datafields.append(rate)
+        qty = int(request.form['qty'])
+        datafields.append(qty)
+        gst = int(request.form['gst'])
+        datafields.append(gst)
+        stax = int(request.form['stax'])
+        datafields.append(stax)
 
 
-app.run(port=5000, debug=True)
+        subtotal = int(rate*qty);
+        datafields.append(subtotal)
+        total = int(subtotal + (gst*subtotal)/100 + (stax*subtotal)/100)
+        datafields.append(total)
+
+        Database.insertData(datafields)
+
+    #datafields=Allfields.fetchallfields()
+    return render_template('newentry.html')
+
+
+
+app.run(port=5001, debug=True)
