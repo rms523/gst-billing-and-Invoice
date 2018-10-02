@@ -1,52 +1,80 @@
 
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <title>The United Cargo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-agency/5.0.2/css/agency.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/style1.css" rel="stylesheet" type="text/css">
+    <style>
 
-{% block page_content %}
+    </style>
+</head>
+<body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">The United Cargo</a>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Select Options</h3>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href={{url_for('data_entry')}}>Entry</a></li>
-            <li><a href={{url_for('user_settings')}}>Settings</a></li>
-            <li><a href={{url_for('user_profile')}}>Profile</a></li>
-            <li><a href={{url_for('logout')}}>Log Out</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-        </div>
-      </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="{{url_for('user_settings')}}">New User</a>
+                    </li>
+                    <li>
+                        <a href="{url_for('user_settings')}">Change Password</a>
+                    </li>
+                     <li>
+                        <a href="{url_for('user_settings')}">Delete User</a>
+                    </li>
+                    <li>
+                        <a href="{url_for('user_settings')}">GST</a>
+                    </li>
+                    <li>
+                        <a href="{url_for('user_settings')}">Service Tax</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="{{url_for('dashboard')}}">Dashboard</a>
+            </li>
+            <li>
+                <a href={{url_for('new_entry')}}>New Entry</a>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="{url_for('user_settings'})">Invoice</a>
+            </li>
+        </ul>
     </nav>
+</div>
 
     <div class="container-fluid">
+      <h2 class="text-center">Item List</h2>
       <div class="row">
-        <h2 class="sub-header">Section title</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>GR.NO</th>
-                  <th>Pkgs</th>
-                  <th>A.WT</th>
-                  <th>C.WT</th>
-                    <th>INVOICE NO.</th>
-                    <th>Sender</th>
-                    <th>Receiver</th>
-                    <th>Origin</th>
-                    <th>Destination</th>
-                    <th>Mode</th>
-                    <th>Freight</th>
+                  <th>Product</th>
+                    <th>Rate</th>
+                  <th>Quantity</th>
+                  <th>GST</th>
+                    <th>S.Tax</th>
+                    <th>Subtotal</th>
+                    <th>Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,21 +83,14 @@
 
                    <tr>
 
-                     <th>{{row['creation']}}</th>
-                     <th>{{row['grno']}}</th>
-                     <th>{{row['pkgs']}}</th>
-                     <th>{{row['awt']}}</th>
-                     <th>{{row['cwt']}}</th>
-                     <th>{{row['invoiceno']}}</th>
-                     <th>{{row['sender']}}</th>
-                     <th>{{row['receiver']}}</th>
-                     <th>{{row['origin']}}</th>
-                     <th>{{row['destination']}}</th>
-                     <th>{{row['mode']}}</th>
-                     <th>{{row['freight']}}</th>
-
-
-
+                     <th>{{row['date']}}</th>
+                     <th>{{row['product']}}</th>
+                       <th>{{row['rate']}}</th>
+                       <th>{{row['quantity']}}</th>
+                     <th>{{row['gstrate']}}</th>
+                     <th>{{row['stax']}}</th>
+                       <th>{{row['subtotal']}}</th>
+                     <th>{{row['total']}}</th>
 
                    </tr>
 
@@ -82,4 +103,17 @@
         </div>
       </div>
 
-{% endblock %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+
+
+</body>
+</html>
+

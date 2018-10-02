@@ -6,7 +6,7 @@ class Allfields():
     @staticmethod
     def fetchallfields():
         cursor = Database.DATABASE.cursor()
-        sql = "SELECT * FROM `entry_fields`"
+        sql = "SELECT * FROM `invoice_data`"
         cursor.execute(sql)
         return (cursor.fetchall())
         Database.DATABASE.close()
