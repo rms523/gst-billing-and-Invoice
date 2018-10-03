@@ -8,9 +8,9 @@ class Allfields():
         cursor = Database.DATABASE.cursor()
         sql = "SELECT * FROM `invoice_data`"
         cursor.execute(sql)
-        return (cursor.fetchall())
-        Database.DATABASE.close()
+        cursor.close()
         gc.collect()
+        return (cursor.fetchall())
 
     @staticmethod
     def saveallfields(li):
@@ -20,3 +20,8 @@ class Allfields():
         Database.DATABASE.commit()
         Database.DATABASE.close()
         gc.collect()
+
+
+if __name__ == '__main__':
+    datafields = Allfields.fetchallfields()
+    print (datafields)

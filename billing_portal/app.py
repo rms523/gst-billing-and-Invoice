@@ -1,4 +1,4 @@
-
+from flask import send_file
 from flask import make_response, flash
 from flask import Flask
 from functools import wraps
@@ -6,8 +6,8 @@ from flask import render_template, redirect, request
 from flask import session
 from flask import url_for
 from nocache import nocache
-
-import time
+import pdfkit
+from billing_portal.models.invoice import GenerateInvoice
 from billing_portal.common.databasesql import Database
 from billing_portal.models.user import User
 from billing_portal.models.allfields import Allfields
@@ -182,5 +182,11 @@ def new_entry():
     return render_template('newentry.html')
 
 
+@app.route('/Invoice')
+def Invoice():
+    datafields=Allfields.fetchallfields()
+    GenerateInvoice.createInvoice(datafields)
+    return send_file('/home/madmax/projects/invoice-and-billing-in-flask/invoice.pdf')
 
-app.run(port=5001, debug=True)
+
+app.run(port=5000, debug=True)

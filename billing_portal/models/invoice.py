@@ -2,40 +2,52 @@ from datetime import datetime, date
 from pyinvoice.models import InvoiceInfo, ServiceProviderInfo, ClientInfo, Item, Transaction
 from pyinvoice.templates import SimpleInvoice
 
-doc = SimpleInvoice('invoice.pdf')
 
-# Paid stamp, optional
-doc.is_paid = False
+class GenerateInvoice(object):
 
-doc.invoice_info = InvoiceInfo(1023, datetime.now(), datetime.now())  # Invoice info, optional
+    @staticmethod
+    def createInvoice(datafields):
+        doc = SimpleInvoice('invoice.pdf')
 
-# Service Provider Info, optional
-doc.service_provider_info = ServiceProviderInfo(
-    name='PyInvoice',
-    street='My Street',
-    city='My City',
-    state='My State',
-    country='My Country',
-    post_code='222222',
-    vat_tax_number='Vat/Tax number'
-)
+        # Paid stamp, optional
+        doc.is_paid = False
 
-# Client info, optional
-doc.client_info = ClientInfo(email='client@example.com')
+        doc.invoice_info = InvoiceInfo(1023, datetime.now(), datetime.now())  # Invoice info, optional
 
-# Add Item
-doc.add_item(Item('Item', 'Item desc', 1, '1.1'))
-doc.add_item(Item('Item', 'Item desc', 2, '2.2'))
-doc.add_item(Item('Item', 'Item desc', 3, '3.3'))
+        # Service Provider Info, optional
+        doc.service_provider_info = ServiceProviderInfo(
+            name='pyInvoice Rahulshamrjdjjkjjk',
+            street='My Street lsjfklsdjljfkldjskljslkdjfklsd',
+            city='My City',
+            state='My State',
+            country='My Country',
+            post_code='222222',
+            vat_tax_number='Vat/Tax number'
+        )
 
-# Tax rate, optional
-doc.set_item_tax_rate(20)  # 20%
+        # Client info, optional
+        doc.client_info = ClientInfo(email='client@example.com')
 
-# Transactions detail, optional
-doc.add_transaction(Transaction('Paypal', 111, datetime.now(), 1))
-doc.add_transaction(Transaction('Stripe', 222, date.today(), 2))
+        # Add Item
+        itemCount = 0
+        for item in range(len(datafields)):
+            doc.add_item(Item(datafields[itemCount][0], datafields[itemCount][1], itemCount+1, datafields[itemCount][6]))
+            itemCount += 1
 
-# Optional
-doc.set_bottom_tip("Email: example@example.com<br />Don't hesitate to contact us for any questions.")
+        # Tax rate, optional
+        doc.set_item_tax_rate(datafields[4])  # 20%
 
-doc.finish()
+        # Transactions detail, optional
+        doc.add_transaction(Transaction('Paypal', 111, datetime.now(), 1))
+        doc.add_transaction(Transaction('Stripe', 222, date.today(), 2))
+
+        # Optional
+        doc.set_bottom_tip("Email: example@example.com<br />Don't hesitate to contact us for any questions.")
+
+        doc.finish()
+
+
+if __name__ == '__main__':
+
+        invoiceObj = GenerateInvoice
+        invoiceObj.createInvoice()
