@@ -6,15 +6,14 @@ from flask import render_template, redirect, request
 from flask import session
 from flask import url_for
 from nocache import nocache
-import pdfkit
 from billing_portal.models.invoice import GenerateInvoice
 from billing_portal.common.databasesql import Database
 from billing_portal.models.user import User
 from billing_portal.models.allfields import Allfields
 
 
-from billing_portal.models.forms import UserAddForm
-import billing_portal.app
+#from billing_portal.models.forms import UserAddForm
+#import billing_portal.app
 
 
 app = Flask(__name__)
@@ -49,32 +48,27 @@ def login_template():
     return render_template('login.html')
 
 
-@app.route('/register_user')
-@login_required
-def register_template():
-    return render_template('add_user.html')
-
-
 
 
 @app.route('/auth/login',methods=['POST'])
 @nocache
 def login_user():
 
-    username = request.form['email']
+    username = request.form['username']
     password = request.form['password']
 
     newuser = User(username, password)
 
     if newuser.login_valid(username, password):
+
         newuser.login(username)
         return redirect(url_for('dashboard'))
     else:
         session['name']= None
         return render_template("login.html")
 
-
 @app.route('/dashboard',methods=['GET','POST'])
+@login_required
 def dashboard():
     datafields=Allfields.fetchallfields()
     if request.method == 'POST':
@@ -85,17 +79,6 @@ def dashboard():
 
         return render_template('dashboard.html', datafields=datafields)
 
-@app.route('/auth/add_user',methods=['POST'])
-def add_user():
-    username = request.form['email']
-    password = request.form['password']
-
-    if(User.add_user(username, password)):
-        return render_template("profile.html")
-
-    else:
-        flash("That username already exists.!")
-        return render_template("add_user.html")
 
 
 @app.route('/data_entry')
@@ -140,19 +123,10 @@ def page_not_found(e):
     return render_template("404.html")
 
 
-@app.route('/about')
-def about_template():
-    return render_template('about.html')
 
-@app.route('/user_profile')
-def user_profile():
-    return render_template('profile.html')
-
-@app.route('/user_settings')
-def user_settings():
-    return render_template('user_settings.html')
 
 @app.route('/New_Entry', methods=['GET', 'POST'])
+@login_required
 def new_entry():
     if request.method == 'POST':
         datafields = []
@@ -176,17 +150,78 @@ def new_entry():
         total = int(subtotal + (gst*subtotal)/100 + (stax*subtotal)/100)
         datafields.append(total)
 
-        Database.insertData(datafields)
+        Allfields.saveallfields(datafields)
 
     #datafields=Allfields.fetchallfields()
     return render_template('newentry.html')
 
 
 @app.route('/Invoice')
+@login_required
 def Invoice():
     datafields=Allfields.fetchallfields()
     GenerateInvoice.createInvoice(datafields)
     return send_file('/home/madmax/projects/invoice-and-billing-in-flask/invoice.pdf')
+
+
+@app.route('/auth/add_user',methods=['POST'])
+def add_user():
+    username = request.form['username']
+    password = request.form['password']
+
+    if(User.add_user(username, password)):
+        return render_template("profile.html")
+
+    else:
+        flash("That username already exists.!")
+        return render_template("add_user.html")
+
+
+
+@app.route('/create_user', methods=['GET', 'POST'])
+@login_required
+def create_user():
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+        if(User.add_user(username, password)):
+            return redirect('dashboard')
+        else:
+            return render_template('addnewuser.html')
+    else:
+        return render_template('addnewuser.html')
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+        if(User.update_user(username, password)):
+            return redirect('dashboard')
+        else:
+            return render_template('changepassword.html')
+    else:
+        return render_template('changepassword.html')
+
+
+@app.route('/delete_user', methods=['GET', 'POST'])
+
+@login_required
+def delete_user():
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+        if(User.delete_user(username, password)):
+            return redirect('dashboard')
+        else:
+            return render_template('deleteuser.html')
+    else:
+        return render_template('deleteuser.html')
 
 
 app.run(port=5000, debug=True)
