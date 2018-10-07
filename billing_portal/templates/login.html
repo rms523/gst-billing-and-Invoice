@@ -1,3 +1,7 @@
+
+
+
+
 {% extends "base.html" %}
 
 {% block title %}
@@ -6,22 +10,55 @@ Login
 
 {% block page_content %}
 <div class="container">
-     <div class="row">
-    <div class="col-xs-4 col-xs-offset-4 text-center">
-    <form id="login-form" class="form-signin" action="/auth/login" method="post">
-        <div class = "form-group">
-            <label for="email">Email</label>
-            <input type="text" id="email" class="form-control" name="email">
-        </div>
-        <div class = "form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" class="form-control" name="password">
-        </div>
-        <button type="submit" class="btn btn-success">Log in</button>
 
-    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+        <form id="login-form" class="form-signin" action="/auth/login" method="post">
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                </div>
+
+               <div class="col-md-4">
+                 <div class = "form-group">
+                     <label for="username">Username</label>
+                     <input type="text" id="username" class="form-control" name="username">
+                 </div>
+                 <div class = "form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" name="password">
+                 </div>
+               </div>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="row">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-1">
+
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success" style="width: 100%">Log in</button>
+                </div>
+            </div>
+        </form>
 </div>
-     </div>
-</div>
+
 
 {% endblock %}
+
+
+
+
+
+

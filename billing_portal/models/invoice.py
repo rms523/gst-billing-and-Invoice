@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from pyinvoice.models import InvoiceInfo, ServiceProviderInfo, ClientInfo, Item, Transaction
 from pyinvoice.templates import SimpleInvoice
+from billing_portal.models.allfields import Allfields
 
 
 class GenerateInvoice(object):
@@ -10,14 +11,14 @@ class GenerateInvoice(object):
         doc = SimpleInvoice('invoice.pdf')
 
         # Paid stamp, optional
-        doc.is_paid = False
+        doc.is_paid = True
 
         doc.invoice_info = InvoiceInfo(1023, datetime.now(), datetime.now())  # Invoice info, optional
 
         # Service Provider Info, optional
         doc.service_provider_info = ServiceProviderInfo(
-            name='pyInvoice Rahulshamrjdjjkjjk',
-            street='My Street lsjfklsdjljfkldjskljslkdjfklsd',
+            name='pyInvoice',
+            street='My Street',
             city='My City',
             state='My State',
             country='My Country',
@@ -30,12 +31,12 @@ class GenerateInvoice(object):
 
         # Add Item
         itemCount = 0
-        for item in range(len(datafields)):
-            doc.add_item(Item(datafields[itemCount][0], datafields[itemCount][1], itemCount+1, datafields[itemCount][6]))
+        for item in range(4):
+            doc.add_item(Item(datafields[0]['product'], 'Item Desc', int(datafields[0]['quantity']), str(datafields[0]['rate'])))
             itemCount += 1
 
         # Tax rate, optional
-        doc.set_item_tax_rate(datafields[4])  # 20%
+        doc.set_item_tax_rate(int(datafields[0]['gstrate']))  # 20%
 
         # Transactions detail, optional
         doc.add_transaction(Transaction('Paypal', 111, datetime.now(), 1))
@@ -48,6 +49,9 @@ class GenerateInvoice(object):
 
 
 if __name__ == '__main__':
+        datafields = Allfields.fetchallfields()
 
         invoiceObj = GenerateInvoice
-        invoiceObj.createInvoice()
+        print (datafields)
+       # invoiceObj.createInvoice(datafields)
+
