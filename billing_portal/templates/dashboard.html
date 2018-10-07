@@ -28,33 +28,27 @@
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Settings</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a href="{{url_for('user_settings')}}">New User</a>
+                        <a href={{url_for('create_user')}}>New User</a>
                     </li>
                     <li>
-                        <a href="{url_for('user_settings')}">Change Password</a>
+                        <a href={{url_for('change_password')}}>Change Password</a>
                     </li>
                      <li>
-                        <a href="{url_for('user_settings')}">Delete User</a>
-                    </li>
-                    <li>
-                        <a href="{url_for('user_settings')}">GST</a>
-                    </li>
-                    <li>
-                        <a href="{url_for('user_settings')}">Service Tax</a>
+                        <a href={{url_for('delete_user')}}>Delete User</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="{{url_for('dashboard')}}">Dashboard</a>
+                <a href={{url_for('dashboard')}}>Dashboard</a>
             </li>
             <li>
                 <a href={{url_for('new_entry')}}>New Entry</a>
             </li>
             <li>
-                <a href="#">About</a>
-            </li>
-            <li>
                 <a href={{url_for('Invoice')}} target="_blank">Invoice</a>
+            </li>
+             <li>
+                <a href={{url_for('logout')}}> Logout </a>
             </li>
         </ul>
     </nav>

@@ -1,5 +1,5 @@
 from flask import session
-from passlib.hash import sha256_crypt
+#from passlib.hash import sha256_crypt
 from billing_portal.common.databasesql import Database
 
 
@@ -35,13 +35,31 @@ class User(object):
     def add_user(cls, username, password ):
         user = cls.get_by_name(username)
         if user is None:
-            password = sha256_crypt.encrypt(str(password))
+            #password = sha256_crypt.encrypt(str(password))
             Database.insert(username, password)
             session['name'] = username
             return True
         else:
             return False
 
+
+    @classmethod
+    def update_user(cls, username, password):
+        user = cls.get_by_name(username)
+        if user is not None:
+            Database.update(username, password)
+            return True
+        else:
+            return False
+
+    @classmethod
+    def delete_user(cls, username, password):
+        user = cls.get_by_name(username)
+        if user is not None and user.username == username and user.password == password:
+            Database.delete(username)
+            return True
+        else:
+            return False
 
     @staticmethod
     def login(username):

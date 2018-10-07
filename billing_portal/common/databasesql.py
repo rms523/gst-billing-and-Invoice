@@ -21,7 +21,7 @@ class Database(object):
     def insert(username,password):
 
         cursor = Database.DATABASE.cursor()
-        sql = "insert into admincredentials(name,password) values(%s,%s)"
+        sql = "insert into admincredentials(username,password) values(%s,%s)"
         cursor.execute(sql,(username,password))
         cursor.close()
         Database.DATABASE.commit()
@@ -43,16 +43,30 @@ class Database(object):
         return (cursor.fetchone())
 
     @staticmethod
-    def insertData(data):
+    def delete(username):
+
         cursor = Database.DATABASE.cursor()
-        sql = "insert into invoice_data(date, product, rate, quantity, gstrate, stax, subtotal, total) values(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7]))
+        sql = "Delete  FROM `admincredentials` where `username`=%s"
+        cursor.execute(sql, (username))
         cursor.close()
-        Database.DATABASE.commit()
 
         gc.collect()
 
 
+
+    @staticmethod
+    def update(username, password):
+
+        cursor = Database.DATABASE.cursor()
+        sql = "UPDATE `admincredentials` SET `password`=%s where `username`=%s"
+        cursor.execute(sql, (password, username))
+        cursor.close()
+
+        gc.collect()
+
+
+
 if __name__ == '__main__':
+
     db = Database()
     db.initialize()
