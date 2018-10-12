@@ -186,7 +186,9 @@ def create_user():
         username = request.form['username']
         password = request.form['password']
         if(User.add_user(username, password)):
-            return redirect('dashboard')
+            flash("User Created Succefully.")
+            return render_template('addnewuser.html')
+
         else:
             return render_template('addnewuser.html')
     else:
@@ -209,7 +211,6 @@ def change_password():
 
 
 @app.route('/delete_user', methods=['GET', 'POST'])
-
 @login_required
 def delete_user():
     if request.method == 'POST':
