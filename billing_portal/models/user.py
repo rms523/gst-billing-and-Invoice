@@ -53,9 +53,9 @@ class User(object):
             return False
 
     @classmethod
-    def delete_user(cls, username, password):
+    def delete_user(cls, username):
         user = cls.get_by_name(username)
-        if user is not None and user.username == username and user.password == password:
+        if user is not None:
             Database.delete(username)
             return True
         else:

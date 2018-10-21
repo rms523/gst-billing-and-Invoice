@@ -13,10 +13,6 @@ from billing_portal.models.allfields import Allfields
 import time
 
 
-#from billing_portal.models.forms import UserAddForm
-#import billing_portal.app
-
-
 app = Flask(__name__)
 app.secret_key = "somerandomstringisrequired"
 
@@ -33,7 +29,7 @@ def login_required(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            flash("You need to login first.")
+            flash("You need to login first.", 'error')
             return redirect(url_for('login_template'))
 
     return wrap
@@ -43,12 +39,9 @@ def home_template():
     return redirect(url_for('login_template'))
 
 
-
 @app.route('/login')
 def login_template():
     return render_template('login.html')
-
-
 
 
 @app.route('/auth/login',methods=['POST'])
@@ -65,73 +58,32 @@ def login_user():
         return redirect(url_for('dashboard'))
     else:
         session['name']= None
-        return render_template("login.html")
+        flash("Invalid Credentials", 'error')
+        return redirect(url_for("login_template"))
+
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
     datafields=Allfields.fetchallfields()
-    if request.method == 'POST':
-
-        return render_template('dashboard.html', datafields=datafields)
-
-    else:
-
-        return render_template('dashboard.html', datafields=datafields)
+    return render_template('dashboard.html', datafields=datafields)
 
 
-
-@app.route('/data_entry')
-@login_required
-def data_entry():
-    return render_template('fields.html')
-
-
-@app.route('/handle_data', methods=['POST'])
-@login_required
-def handle_data():
-    date = request.form['Date']
-    grno = request.form['GrNo']
-    pkgs = request.form['Pkgs']
-    awt = request.form['Awt']
-    cwt = request.form['Cwt']
-    invoiceno = request.form['Invoice']
-    sender = request.form['Sender']
-    receiver = request.form['Receiver']
-    origin = request.form['Origin']
-    destination = request.form['Destination']
-    mode = request.form['Mode']
-    freight = request.form['Freight']
-    li = [date,grno,pkgs,awt,cwt,invoiceno,sender,receiver,origin,destination,mode,freight]
-    Allfields.saveallfields(li)
-    return redirect(url_for('data_entry'))
-
-
-
-
-@app.route('/logout')
-@nocache
-@login_required
-def logout():
-     User.logout()
-     flash("You have been logged out!")
-     return redirect(url_for('home_template'))
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template("404.html")
-
-
+@app.route('/dashboard/<entryID>/')
+def dashboard_delete(entryID):
+    Allfields.deleteentry(entryID)
+    flash('Entry Deleted Successfully', 'success')
+    return redirect(url_for('dashboard'))
 
 
 @app.route('/New_Entry', methods=['GET', 'POST'])
 @login_required
 def new_entry():
+    totallist = [0,0,0,0]
     if request.method == 'POST':
         datafields = []
         date = request.form['date']
-        #date = time.strftime(date)
+        # date = time.strftime(date)
         datafields.append(date)
         prdct = request.form['prdct']
         datafields.append(prdct)
@@ -144,16 +96,84 @@ def new_entry():
         stax = int(request.form['stax'])
         datafields.append(stax)
 
-
-        subtotal = int(rate*qty);
+        subtotal = int(rate * qty);
         datafields.append(subtotal)
-        total = int(subtotal + (gst*subtotal)/100 + (stax*subtotal)/100)
+        total = int(subtotal + (gst * subtotal) / 100 + (stax * subtotal) / 100)
         datafields.append(total)
 
-        Allfields.saveallfields(datafields)
+        if request.form.get('Submit') == 'Add New Entry':
 
-    #datafields=Allfields.fetchallfields()
-    return render_template('newentry.html')
+            if Allfields.saveallfields(datafields):
+                totallist[0] = datafields[6]
+                totallist[1] = datafields[4]
+                totallist[2] = datafields[5]
+                totallist[3] = datafields[7]
+                flash("Entry added successfully", 'success')
+
+            else:
+                flash("Something went wrong", 'error')
+        #datafields=Allfields.fetchallfields()
+        if request.form.get('Submit') == 'Generate Invoice':
+            dicdatafields = {}
+            dicdatafields['date'] = datafields[0]
+            dicdatafields['product'] = datafields[1]
+            dicdatafields['rate'] = datafields[2]
+            dicdatafields['quantity'] = datafields[3]
+            dicdatafields['gstrate'] = datafields[4]
+            dicdatafields['stax'] = datafields[5]
+            dicdatafields['subtotal'] = datafields[6]
+            dicdatafields['total'] = datafields[7]
+            GenerateInvoice.createInvoice([dicdatafields])
+            time.sleep(1)
+            return send_file('/home/madmax/projects/gst-billing-and-Invoice/invoice.pdf')
+
+    return render_template('newentry.html', totallist = totallist)
+
+
+@app.route('/create_user', methods=['GET', 'POST'])
+@login_required
+def create_user():
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+        if(User.add_user(username, password)):
+            flash('User added succefully', 'success')
+        else:
+            flash('User already exists.', 'error')
+    return render_template('addnewuser.html')
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+        if(User.update_user(username, password)):
+            flash('password changed successfully.', 'success')
+        else:
+            flash('Username do not exists.', 'error')
+
+    return render_template('changepassword.html')
+
+
+@app.route('/delete_user',methods=['GET', 'POST'])
+@login_required
+def delete_user():
+    userlist = Allfields.fetchallusers()
+    return render_template('deleteuser.html', userlist = userlist)
+
+
+
+@app.route('/delete_user/<username>', methods=['GET', 'POST'])
+@login_required
+def deletinguser(username):
+    User.delete_user(username)
+    flash('user deleted successfully', 'success')
+    return redirect(url_for('delete_user'))
+
 
 
 @app.route('/Invoice')
@@ -165,64 +185,19 @@ def Invoice():
     return send_file('/home/madmax/projects/gst-billing-and-Invoice/invoice.pdf')
 
 
-@app.route('/auth/add_user',methods=['POST'])
-def add_user():
-    username = request.form['username']
-    password = request.form['password']
 
-    if(User.add_user(username, password)):
-        return render_template("profile.html")
-
-    else:
-        flash("That username already exists.!")
-        return render_template("add_user.html")
-
-
-
-@app.route('/create_user', methods=['GET', 'POST'])
+@app.route('/logout')
+@nocache
 @login_required
-def create_user():
-    if request.method == 'POST':
-
-        username = request.form['username']
-        password = request.form['password']
-        if(User.add_user(username, password)):
-            return redirect('dashboard')
-        else:
-            return render_template('addnewuser.html')
-    else:
-        return render_template('addnewuser.html')
+def logout():
+     User.logout()
+     flash("You have been logged out!", 'success')
+     return redirect(url_for('home_template'))
 
 
-@app.route('/change_password', methods=['GET', 'POST'])
-@login_required
-def change_password():
-    if request.method == 'POST':
-
-        username = request.form['username']
-        password = request.form['password']
-        if(User.update_user(username, password)):
-            return redirect('dashboard')
-        else:
-            return render_template('changepassword.html')
-    else:
-        return render_template('changepassword.html')
-
-
-@app.route('/delete_user', methods=['GET', 'POST'])
-
-@login_required
-def delete_user():
-    if request.method == 'POST':
-
-        username = request.form['username']
-        password = request.form['password']
-        if(User.delete_user(username, password)):
-            return redirect('dashboard')
-        else:
-            return render_template('deleteuser.html')
-    else:
-        return render_template('deleteuser.html')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html")
 
 
 app.run(port=5002, debug=True)

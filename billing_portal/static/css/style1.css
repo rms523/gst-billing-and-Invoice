@@ -89,3 +89,14 @@ ul ul a {
         margin-top: -50px;
     }
 
+.alert {
+
+}
+
+.alert.success {
+  background-color: green;
+}
+
+.alert.error {
+  background-color: red;
+}

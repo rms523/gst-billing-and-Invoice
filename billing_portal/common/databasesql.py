@@ -10,7 +10,7 @@ class Database(object):
     def initialize():
         Database.DATABASE = pymysql.connect(host='localhost',
                                     user='root',
-                                    password='supernova',
+                                    password='root',
                                     db='billing',
                                     unix_socket='/run/mysqld/mysqld.sock',
                                     charset='utf8mb4',
