@@ -1,0 +1,17 @@
+
+*.pyc
+__pycache__/
+
+billing_portal/__pycache__/
+
+instance/
+
+.idea/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/

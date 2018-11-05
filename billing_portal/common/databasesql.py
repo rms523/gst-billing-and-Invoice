@@ -37,6 +37,7 @@ class Database(object):
         sql = "SELECT * FROM `admincredentials` where `username`=%s"
         cursor.execute(sql, (username))
         cursor.close()
+        Database.DATABASE.commit()
 
         gc.collect()
 
@@ -49,6 +50,7 @@ class Database(object):
         sql = "Delete  FROM `admincredentials` where `username`=%s"
         cursor.execute(sql, (username))
         cursor.close()
+        Database.DATABASE.commit()
 
         gc.collect()
 
@@ -61,6 +63,7 @@ class Database(object):
         sql = "UPDATE `admincredentials` SET `password`=%s where `username`=%s"
         cursor.execute(sql, (password, username))
         cursor.close()
+        Database.DATABASE.commit()
 
         gc.collect()
 

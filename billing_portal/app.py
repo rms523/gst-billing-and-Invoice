@@ -170,9 +170,12 @@ def delete_user():
 @app.route('/delete_user/<username>', methods=['GET', 'POST'])
 @login_required
 def deletinguser(username):
-    User.delete_user(username)
-    flash('user deleted successfully', 'success')
-    return redirect(url_for('delete_user'))
+    if User.delete_user(username):
+        flash('user deleted successfully', 'success')
+        return redirect(url_for('delete_user'))
+    else:
+        flash('error occured', 'error')
+        return redirect(url_for('delete_user'))
 
 
 
