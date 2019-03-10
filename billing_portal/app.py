@@ -125,7 +125,7 @@ def new_entry():
             dicdatafields['total'] = datafields[7]
             GenerateInvoice.createInvoice([dicdatafields])
             time.sleep(1)
-            return send_file('/home/madmax/projects/gst-billing-and-Invoice/invoice.pdf')
+            return send_file('invoice.pdf')
 
     return render_template('newentry.html', totallist = totallist)
 
@@ -185,7 +185,7 @@ def Invoice():
     datafields=Allfields.fetchallfields()
     GenerateInvoice.createInvoice(datafields)
     time.sleep(1)
-    return send_file('/home/madmax/projects/gst-billing-and-Invoice/invoice.pdf')
+    return send_file('invoice.pdf')
 
 
 
