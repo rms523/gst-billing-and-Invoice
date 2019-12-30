@@ -8,14 +8,15 @@ class Database(object):
 
     @staticmethod
     def initialize():
-        Database.DATABASE = pymysql.connect(host='localhost',
+     
+
+        Database.DATABASE = pymysql.connect(host='db',
                                     user='root',
                                     password='root',
                                     db='billing',
-                                    unix_socket='/run/mysqld/mysqld.sock',
+                                    port=3306,
                                     charset='utf8mb4',
                                     cursorclass=pymysql.cursors.DictCursor)
-
 
     @staticmethod
     def insert(username,password):

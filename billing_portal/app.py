@@ -203,4 +203,4 @@ def page_not_found(e):
     return render_template("404.html")
 
 
-app.run(port=5002, debug=True)
+app.run(host='0.0.0.0',debug=True)

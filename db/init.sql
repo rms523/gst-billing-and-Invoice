@@ -25,11 +25,14 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `admincredentials`
 --
+CREATE Database `billing`;
+
+Use `billing`;
 
 CREATE TABLE `admincredentials` (
   `username` varchar(40) NOT NULL,
   `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);     
 
 --
 -- Dumping data for table `admincredentials`
@@ -47,8 +50,8 @@ INSERT INTO `admincredentials` (`username`, `password`) VALUES
 
 CREATE TABLE `constantfields` (
   `name` varchar(20) NOT NULL,
-  `value` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `value` float NOT NULL  
+);
 
 --
 -- Dumping data for table `constantfields`
@@ -74,7 +77,7 @@ CREATE TABLE `invoice_data` (
   `stax` int(11) NOT NULL,
   `subtotal` int(11) NOT NULL,
   `total` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data for table `invoice_data`
